@@ -34,6 +34,9 @@ app.use((req, _res, next) => { console.log(`[REQ] ${req.method} ${req.path}`); n
 // (Optional) root for sanity
 app.get('/', (_req, res) => res.json({ ok: true, hint: 'Use /healthz or POST /decode' }));
 
+// Optional: unified 404 so you see the path in the browser too
+app.use((req, res) => res.status(404).json({ error: 'not found', path: req.originalUrl }));
+
 // POST /decode  { packageName, encodedIntegrityToken }
 app.post('/decode', async (req, res) => {
   console.log("[ROUTE] POST /decode hit");
