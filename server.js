@@ -11,6 +11,12 @@ console.log("[ENV] PORT:", process.env.PORT || "(default 8080)");
 const app = express();
 console.log("[APP] Creating Express app");
 
+// put this ABOVE everything else (before body parsers, auth, decode, 404, etc.)
+app.all('/healthz', (req, res) => {
+  console.log('[ROUTE] /healthz', req.method);
+  res.set('Cache-Control', 'no-store').json({ ok: true });
+});
+
 //app.use(express.json({ limit: '1mb' }));
 //console.log("[APP] JSON body parser attached");
 
@@ -23,10 +29,10 @@ const auth = new GoogleAuth({
 // (Optional) log every request path so you can see it in logs
 app.use((req, _res, next) => { console.log(`[REQ] ${req.method} ${req.path}`); next(); });
 
-app.get('/healthz', (_req, res) => {
-  console.log("[ROUTE] GET /healthz hit");
-  res.json({ ok: true });
-});
+//app.get('/healthz', (_req, res) => {
+//  console.log("[ROUTE] GET /healthz hit");
+//  res.json({ ok: true });
+//});
 
 // Health route (exactly this path)
 //app.get('/healthz', (_req, res) => res.json({ ok: true }));
