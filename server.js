@@ -71,7 +71,7 @@ const auth = new GoogleAuth({
 
                         app.get('/decode', (_req, res) => {
                           console.log("[ROUTE] You need to do a POST to this route");
-                          res.json({ ok: true });
+                          res.json({ ok: true, hint: 'Use You need to do a POST to this route /decode' });
                         });
 
                         // Health route (exactly this path)
