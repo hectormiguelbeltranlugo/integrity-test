@@ -11,8 +11,8 @@ console.log("[ENV] PORT:", process.env.PORT || "(default 8080)");
 const app = express();
 console.log("[APP] Creating Express app");
 
-app.use(express.json({ limit: '1mb' }));
-console.log("[APP] JSON body parser attached");
+//app.use(express.json({ limit: '1mb' }));
+//console.log("[APP] JSON body parser attached");
 
 // Init GoogleAuth
 console.log("[AUTH] Initializing GoogleAuth with Play Integrity scope");
@@ -34,8 +34,11 @@ app.get('/healthz', (_req, res) => {
 // (Optional) root for sanity
 app.get('/', (_req, res) => res.json({ ok: true, hint: 'Use /healthz or POST /decode' }));
 
+const jsonBody = express.json({ limit: '1mb' });
+console.log("[APP] JSON body parser attached");
+
 // POST /decode  { packageName, encodedIntegrityToken }
-app.post('/decode', async (req, res) => {
+app.post('/decode',jsonBody, async (req, res) => {
   console.log("[ROUTE] POST /decode hit");
   console.log("[REQ BODY]", req.body);
 
