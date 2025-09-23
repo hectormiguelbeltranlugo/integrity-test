@@ -20,22 +20,19 @@ const auth = new GoogleAuth({
   scopes: ['https://www.googleapis.com/auth/playintegrity']
 });
 
+// (Optional) log every request path so you can see it in logs
+app.use((req, _res, next) => { console.log(`[REQ] ${req.method} ${req.path}`); next(); });
+
 app.get('/healthz', (_req, res) => {
   console.log("[ROUTE] GET /healthz hit");
   res.json({ ok: true });
 });
-
-// (Optional) log every request path so you can see it in logs
-app.use((req, _res, next) => { console.log(`[REQ] ${req.method} ${req.path}`); next(); });
 
 // Health route (exactly this path)
 //app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
 // (Optional) root for sanity
 app.get('/', (_req, res) => res.json({ ok: true, hint: 'Use /healthz or POST /decode' }));
-
-// Optional: unified 404 so you see the path in the browser too
-app.use((req, res) => res.status(404).json({ error: 'not found', path: req.originalUrl }));
 
 // POST /decode  { packageName, encodedIntegrityToken }
 app.post('/decode', async (req, res) => {
@@ -79,6 +76,9 @@ app.post('/decode', async (req, res) => {
     res.status(500).json({ error: String(e) });
   }
 });
+
+// Optional: unified 404 so you see the path in the browser too
+app.use((req, res) => res.status(404).json({ error: 'not found', path: req.originalUrl }));
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
