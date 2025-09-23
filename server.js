@@ -25,6 +25,15 @@ app.get('/healthz', (_req, res) => {
   res.json({ ok: true });
 });
 
+// (Optional) log every request path so you can see it in logs
+app.use((req, _res, next) => { console.log(`[REQ] ${req.method} ${req.path}`); next(); });
+
+// Health route (exactly this path)
+//app.get('/healthz', (_req, res) => res.json({ ok: true }));
+
+// (Optional) root for sanity
+app.get('/', (_req, res) => res.json({ ok: true, hint: 'Use /healthz or POST /decode' }));
+
 // POST /decode  { packageName, encodedIntegrityToken }
 app.post('/decode', async (req, res) => {
   console.log("[ROUTE] POST /decode hit");
