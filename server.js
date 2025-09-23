@@ -35,6 +35,11 @@ app.all('/healthz', (req, res) => {
   res.set('Cache-Control', 'no-store').json({ ok: true });
 });
 
+app.all('/h', (req, res) => {
+  console.log('[ROUTE] /h hit via', req.method);
+  res.json({ ok: true });
+});
+
 // Root for sanity
 app.get('/', (_req, res) => res.json({ ok: true, hint: 'Use /healthz' }));
 
